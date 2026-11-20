@@ -64,7 +64,8 @@ if (($accion === 'detalle' || $accion === 'editar') && $id !== null) {
 
 $estadoFiltro = $_GET['estado'] ?? '';
 $prioridadFiltro = $_GET['prioridad'] ?? '';
-$tareas = (new ListarTareas($pdo))->ejecutar($estadoFiltro, $prioridadFiltro);
+$tituloFiltro = $_GET['titulo'] ?? '';
+$tareas = (new ListarTareas($pdo))->ejecutar($estadoFiltro, $prioridadFiltro, $tituloFiltro);
 
 function e(string $valor): string
 {
@@ -116,6 +117,7 @@ function e(string $valor): string
         <section class="panel">
             <h2>Tareas registradas</h2>
             <form class="filtros" method="get">
+                <input type="search" name="titulo" value="<?= e((string) $tituloFiltro) ?>" placeholder="Buscar por título" aria-label="Buscar por título">
                 <select name="estado"><option value="">Todos los estados</option><?php foreach (['pendiente','en_proceso','completada'] as $v): ?><option value="<?= $v ?>" <?= $estadoFiltro === $v ? 'selected' : '' ?>><?= e(str_replace('_', ' ', $v)) ?></option><?php endforeach; ?></select>
                 <select name="prioridad"><option value="">Todas las prioridades</option><?php foreach (['baja','media','alta'] as $v): ?><option value="<?= $v ?>" <?= $prioridadFiltro === $v ? 'selected' : '' ?>><?= e($v) ?></option><?php endforeach; ?></select>
                 <button type="submit">Filtrar</button><a href="?">Limpiar</a>

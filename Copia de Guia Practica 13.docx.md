@@ -58,13 +58,13 @@ La aplicación se abre en http\://gestor-tareas-s13.test y la base database/tare
 
 | CAMPO | RESPUESTA DEL EQUIPO |
 | ----- | ----- |
-| Versión PHP en Herd | Resultado de herd php \-v: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Laravel Herd activo | Sí ☐   No ☐ |
+| Versión PHP en Herd | PHP 8.3.36 mediante Herd |
+| Laravel Herd activo | Sí ☒   No ☐ |
 | Dominio local Herd | http\://gestor-tareas-s13.test |
-| Repositorio del equipo |  |
-| Rama de trabajo | feature/\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |
-| Sitio enlazado en Herd | Sí ☐   No ☐ |
-| Evidencia de ejecución |  |
+| Repositorio del equipo | https://github.com/maxcz6/S13_Gestor_Tareas |
+| Rama de trabajo | main (pendiente crear feature/busqueda-titulo) |
+| Sitio enlazado en Herd | Sí ☒   No ☐ |
+| Evidencia de ejecución | Evidencias 01 a 08 en la carpeta evidencias/ |
 
 ## **Actividad 2\. Seguir la demostración**
 
@@ -104,11 +104,11 @@ Realicen las cinco operaciones sobre el Gestor de tareas. Para cada una, identif
 
 | N.º | PRUEBA | DATOS UTILIZADOS | CÓDIGO Y RESULTADO | EVIDENCIA | CUMPLE |
 | ----- | ----- | ----- | ----- | ----- | ----- |
-| 1 | Crear una tarea válida |  |  |  |  |
-| 2 | Listar y consultar detalle |  |  |  |  |
-| 3 | Actualizar estado o prioridad |  |  |  |  |
-| 4 | Filtrar el listado |  |  |  |  |
-| 5 | Eliminar y consultar el id |  |  |  |  |
+| 1 | Crear una tarea válida | `titulo=CRUD Evidencia 2026`, `descripcion=Tarea creada para verificar persistencia y operaciones CRUD`, `prioridad=alta`, `estado=pendiente` | Ruta `?accion=crear` con `POST`. Ejecutó `CrearTarea`; `INSERT` creó el ID 5 y SQLite mostró el detalle creado. | [Formulario](./evidencias/01_crear_formulario.png) y [resultado](./evidencias/01_crear_resultado.png) | ☒ Sí |
+| 2 | Listar y consultar detalle | `titulo=CRUD Evidencia 2026`, ID 5 | Ruta `?titulo=CRUD Evidencia 2026` ejecutó `ListarTareas`; la ruta `?accion=detalle&id=5` ejecutó `ObtenerTarea` con `SELECT`. No se modificaron datos. | [Listado](./evidencias/02_listar.png) y [detalle](./evidencias/02_detalle.png) | ☒ Sí |
+| 3 | Actualizar estado o prioridad | ID 5; `prioridad=media`, `estado=completada` | Ruta `?accion=editar&id=5` con `POST`. Ejecutó `ActualizarTarea`; `UPDATE` cambió prioridad y estado y renovó `fecha_actualizacion`. | [Formulario](./evidencias/03_actualizar_formulario.png) y [resultado](./evidencias/03_actualizar_resultado.png) | ☒ Sí |
+| 4 | Filtrar el listado | `titulo=CRUD Evidencia`, `estado=completada`, `prioridad=media` | Ruta `?titulo=CRUD+Evidencia&estado=completada&prioridad=media`. `ListarTareas` ejecutó un `SELECT` combinado y devolvió exactamente 1 tarjeta correspondiente al ID 5. | [Entrada](./evidencias/04_filtrar_entrada.png) y [resultado](./evidencias/04_filtrar_resultado.png) | ☒ Sí |
+| 5 | Eliminar y consultar el id | ID 5 y token CSRF válido | Ruta `?accion=eliminar&id=5` ejecutó `EliminarTarea`; `DELETE` eliminó el registro y mostró `Operación completada: eliminada`. Al consultar `?accion=detalle&id=5`, `ObtenerTarea` devolvió `null` y respondió `La tarea solicitada no existe.` | [Confirmación](./evidencias/05_eliminar_confirmacion.png), [resultado](./evidencias/05_eliminar_resultado.png) y [ID inexistente](./evidencias/05_consulta_id_inexistente.png) | ☒ Sí |
 
 ## **Actividad 4\. Desarrollar una ampliación en una rama**
 
@@ -116,11 +116,11 @@ Cada equipo elegirá una ampliación: fecha límite, categorías, búsqueda por 
 
 | OPERACIÓN | COMANDO O CONSULTA | ARCHIVO / CLASE / FUNCIÓN | ¿MODIFICA ESTADO? | EVIDENCIA |
 | ----- | ----- | ----- | ----- | ----- |
-| Elegir ampliación | Comando o consulta |  | No | Decisión registrada |
-| Crear rama | Git | feature/\_\_\_\_\_\_\_\_\_\_\_\_ | No | Captura o comando |
-| Implementar | Código |  | Según ampliación | Prueba funcional |
-| Confirmar cambios | Git | commit | No | Hash del commit |
-| Abrir pull request | Git | Repositorio del equipo | No | Enlace o captura |
+| Elegir ampliación | Consulta | [`App\Queries\ListarTareas`](./src/Queries/ListarTareas.php) con filtro `titulo` | No | Búsqueda por título registrada |
+| Crear rama | Git | `feature/busqueda-titulo` | No | Rama creada localmente |
+| Implementar | Código | [`src/Queries/ListarTareas.php`](./src/Queries/ListarTareas.php) y [`public/index.php`](./public/index.php) | No: filtra sin modificar datos | Prueba manual: filtrado por título, estado y prioridad |
+| Confirmar cambios | Git | commit | No | Pendiente realizar el commit final |
+| Abrir pull request | Git | Repositorio del equipo | No | Pendiente abrir el pull request |
 
 ## **Actividad 5\. Verificar validación y consistencia**
 
@@ -128,11 +128,11 @@ Ejecuten casos válidos e inválidos. Las reglas deben aplicarse en PHP y las re
 
 | CASO | EJEMPLO | RESPUESTA ESPERADA | RESULTADO REAL | EVIDENCIA |
 | ----- | ----- | ----- | ----- | ----- |
-| Título demasiado corto | A | Rechaza y no inserta. |  |  |
-| Prioridad no permitida | urgente | Rechaza y no actualiza. |  |  |
-| Identificador inexistente | id 9999 | Informa que no existe. |  |  |
-| Persistencia | reiniciar servidor | La tarea permanece en SQLite. |  |  |
-| Prueba automática | herd php tests/smoke.php | Muestra OK sin errores. |  |  |
+| Título demasiado corto | A | Rechaza y no inserta. | El navegador mostró que el título debe tener al menos 5 caracteres y evitó el envío. | [Evidencia](./evidencias/06_titulo_corto.png) |
+| Prioridad no permitida | urgente | Rechaza y no actualiza. | PHP respondió `{"prioridad":"Seleccione una prioridad permitida."}` y no ejecutó el `INSERT`. | [Entrada](./evidencias/07_prioridad_invalida_entrada.png) y [resultado](./evidencias/07_prioridad_invalida_resultado.png) |
+| Identificador inexistente | id 9999; probado también id 5 eliminado | Informa que no existe. | HTTP mostró `La tarea solicitada no existe.` y volvió al listado. | [Evidencia](./evidencias/05_consulta_id_inexistente.png) |
+| Persistencia | recarga de detalle del ID 4 | La tarea permanece en SQLite. | Después de varias operaciones y recarga, el detalle ID 4 mostró sus datos originales y sus fechas. | [Evidencia](./evidencias/08_persistencia.png) |
+| Prueba automática | herd php tests/smoke.php | Muestra OK sin errores. | PHP 8.3.36 mostró `OK: crear, consultar, actualizar y eliminar.` | Consola: prueba ejecutada con PHP Herd |
 
 ## **Actividad 6\. Registrar el trabajo con Git y preparar CI**
 
@@ -140,40 +140,40 @@ Cada equipo trabajará en su propio repositorio creado desde la plantilla. Los i
 
 | CRITERIO | CUMPLE | AJUSTAR | OBSERVACIÓN |
 | ----- | :---: | :---: | ----- |
-| El repositorio pertenece al equipo, no a toda el aula. |  |  |  |
-| La ampliación se desarrolló en una rama feature. |  |  |  |
-| Los commits describen cambios concretos. |  |  |  |
-| El pull request explica qué cambió y cómo se probó. |  |  |  |
-| PHP CI o la prueba local termina correctamente. |  |  |  |
+| El repositorio pertenece al equipo, no a toda el aula. | ☒ | ☐ | Repositorio: https://github.com/maxcz6/S13_Gestor_Tareas |
+| La ampliación se desarrolló en una rama feature. | ☐ | ☒ | La ampliación está implementada; falta crear y subir la rama feature/busqueda-titulo. |
+| Los commits describen cambios concretos. | ☐ | ☒ | Pendiente confirmar el commit final con la implementación y evidencias. |
+| El pull request explica qué cambió y cómo se probó. | ☐ | ☒ | Pendiente crear el pull request hacia main. |
+| PHP CI o la prueba local termina correctamente. | ☒ | ☐ | PHP CI está configurado en `.github/workflows/php-ci.yml`; la prueba local terminó con OK. |
 
 # **VI. CONTROL Y VERIFICACIÓN**
 
-☐ El Gestor de tareas se ejecuta con Laravel Herd y un dominio local .test.
+☒ El Gestor de tareas se ejecuta con Laravel Herd y un dominio local .test.
 
-☐ Crear, listar, consultar, actualizar y eliminar producen resultados verificables.
+☒ Crear, listar, consultar, actualizar y eliminar producen resultados verificables.
 
-☐ Los datos permanecen en SQLite después de una nueva consulta o reinicio.
+☒ Los datos permanecen en SQLite después de una nueva consulta o reinicio.
 
-☐ El equipo distingue las clases de comandos y consultas.
+☒ El equipo distingue las clases de comandos y consultas.
 
-☐ El backend rechaza datos inválidos y controla identificadores inexistentes.
+☒ El backend rechaza datos inválidos y controla identificadores inexistentes.
 
-☐ La ampliación funciona y se desarrolló en una rama feature.
+☒ La ampliación funciona. Falta formalizar la rama feature.
 
 ☐ El pull request contiene una descripción y evidencias del cambio.
 
-☐ La validación automática PHP CI termina correctamente.
+☒ La validación automática PHP CI está configurada y la prueba local termina correctamente. Falta confirmar su ejecución en GitHub.
 
 # **VII. CONCLUSIONES**
 
 1\. ¿Qué diferencia observaron entre una clase Command y una clase Query?
 
-Haga clic o pulse aquí para escribir texto.
+Una clase Command modifica el estado y ejecuta INSERT, UPDATE o DELETE. Una clase Query solo consulta la base con SELECT y devuelve datos sin cambiarlos.
 
 2\. ¿Qué regla evitó almacenar un dato inválido en SQLite?
 
-Haga clic o pulse aquí para escribir texto.
+La validación del título, entre 5 y 100 caracteres, impide datos demasiado cortos. PHP rechaza prioridades y estados no permitidos y SQLite respalda estas reglas mediante restricciones CHECK.
 
 3\. ¿Cómo ayudará el flujo de rama y pull request cuando se incorpore CI/CD?
 
-Haga clic o pulse aquí para escribir texto.
+La rama aísla la ampliación y el pull request permite revisar exactamente qué cambió. GitHub Actions puede ejecutar PHP CI antes de combinar el cambio y evitar integrar código que no pase la sintaxis o el CRUD.

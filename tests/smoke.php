@@ -22,6 +22,8 @@ try {
 
     assert($id > 0);
     assert(count((new ListarTareas($pdo))->ejecutar()) === 1);
+    assert(count((new ListarTareas($pdo))->ejecutar(null, null, 'evidencia')) === 1);
+    assert(count((new ListarTareas($pdo))->ejecutar(null, null, 'inexistente')) === 0);
     assert((new ObtenerTarea($pdo))->ejecutar($id)['titulo'] === 'Preparar evidencia de práctica');
 
     (new ActualizarTarea($pdo))->ejecutar($id, [

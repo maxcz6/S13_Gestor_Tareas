@@ -117,10 +117,10 @@ Cada equipo elegirá una ampliación: fecha límite, categorías, búsqueda por 
 | OPERACIÓN | COMANDO O CONSULTA | ARCHIVO / CLASE / FUNCIÓN | ¿MODIFICA ESTADO? | EVIDENCIA |
 | ----- | ----- | ----- | ----- | ----- |
 | Elegir ampliación | Consulta | [`App\Queries\ListarTareas`](./src/Queries/ListarTareas.php) con filtro `titulo` | No | Búsqueda por título registrada |
-| Crear rama | Git | `feature/busqueda-titulo` | No | Rama creada localmente |
+| Crear rama | Git | `feature/busqueda-titulo` | No | [Rama publicada en GitHub](https://github.com/maxcz6/S13_Gestor_Tareas/tree/feature/busqueda-titulo) |
 | Implementar | Código | [`src/Queries/ListarTareas.php`](./src/Queries/ListarTareas.php) y [`public/index.php`](./public/index.php) | No: filtra sin modificar datos | Prueba manual: filtrado por título, estado y prioridad |
-| Confirmar cambios | Git | commit | No | Pendiente realizar el commit final |
-| Abrir pull request | Git | Repositorio del equipo | No | Pendiente abrir el pull request |
+| Confirmar cambios | Git | commit `44a909a` | No | [Commit confirmado en GitHub](https://github.com/maxcz6/S13_Gestor_Tareas/commit/44a909a) |
+| Abrir pull request | Git | Repositorio del equipo | No | [Crear pull request hacia main](https://github.com/maxcz6/S13_Gestor_Tareas/pull/new/feature/busqueda-titulo) |
 
 ## **Actividad 5\. Verificar validación y consistencia**
 
